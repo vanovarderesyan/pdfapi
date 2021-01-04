@@ -48,3 +48,4 @@ toml==0.10.1
 uritemplate==3.0.1
 urllib3==1.25.9
 openai==0.2.6
+whitenoise==5.2.0
