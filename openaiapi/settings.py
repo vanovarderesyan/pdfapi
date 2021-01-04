@@ -77,7 +77,7 @@ MIDDLEWARE_CLASSES = [
     'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-s
+
 ROOT_URLCONF = 'openaiapi.urls'
 
 TEMPLATES = [
