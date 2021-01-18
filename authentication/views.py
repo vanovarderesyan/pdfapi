@@ -39,27 +39,7 @@ import csv
 from io import BytesIO
 from django.core.files.base import ContentFile
 import uuid
-
-
-filename = './update0.3 Project Requirements documentation.pdf'
-pdf_file = 'update0.3 Project Requirements documentation.pdf'
-docx_file = 'update0.3 Project Requirements documentation.docx'
-# images = convert_from_path('update0.3 Project Requirements documentation.pdf',500)
-# with tempfile.TemporaryDirectory() as path:
-#     images_from_path = convert_from_path(filename, output_folder=path, last_page=26, first_page =1)
-
-# base_filename = os.path.splitext(os.path.basename(filename))[0] + '.jpg'     
-
-# save_dir = './'
 from django.http import FileResponse
-# for page in images_from_path:
-#     page.save(os.path.join(save_dir, base_filename), 'JPEG')
-
-# convert pdf to docx
-# cv = Converter(pdf_file)
-# cv.convert(docx_file, start=0, end=None)
-# cv.close()
-
 
 class FileUploadView(views.APIView):
     serializer_class = UploadSerializer
@@ -69,7 +49,7 @@ class FileUploadView(views.APIView):
         print(data.__dict__)
         if data.content_type != 'application/pdf':
             return Response(status=400)
-            
+
         unique_filename = str(uuid.uuid4())
         docs_file_name_path = 'docx/'+unique_filename+ '.docx'
         file_path = 'pdf/'+unique_filename+'.pdf'
