@@ -26,6 +26,7 @@ import csv
 from django.core.files.base import ContentFile
 import uuid
 
+from django.http import FileResponse
 
 class FileUploadView(views.APIView):
     serializer_class = UploadSerializer
