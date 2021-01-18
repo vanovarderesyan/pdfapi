@@ -1,4 +1,4 @@
-"""openaiapi URL Configuration
+"""pdf_api URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/2.2/topics/http/urls/
@@ -25,7 +25,7 @@ from django.conf import settings
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="openai api",
+        title="pdf api",
         default_version='v1',
         description="Test description",
         license=openapi.License(name="Test License"),

@@ -78,7 +78,7 @@ MIDDLEWARE_CLASSES = [
 ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-ROOT_URLCONF = 'openaiapi.urls'
+ROOT_URLCONF = 'pdf_api.urls'
 
 TEMPLATES = [
     {
@@ -96,7 +96,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'openaiapi.wsgi.application'
+WSGI_APPLICATION = 'pdf_api.wsgi.application'
 
 # CORS WHITELIST
 CORS_ORIGIN_WHITELIST = [
