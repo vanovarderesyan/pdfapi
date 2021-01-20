@@ -2,6 +2,7 @@ from rest_framework import generics, status, views, permissions
 from .serializers import UploadSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+import xlsxwriter
 
 import jwt
 from django.conf import settings
@@ -30,7 +31,10 @@ from django.http import FileResponse
 from io import StringIO
 from PyPDF2 import PdfFileReader
 import shutil
-
+from io import BytesIO
+import pdftotext
+from .doc2pdf import doc2pdf
+from .imgpdf import custom_img2pdf,custom_img_png_2pdf
 class FileUploadView(views.APIView):
     serializer_class = UploadSerializer
 
@@ -57,7 +61,6 @@ class FileUploadView(views.APIView):
 
 class FileUploadPdfToImageView(views.APIView):
     serializer_class = UploadSerializer
-
     def post(self, request,format=None):
         data = request.data['file']
         if data.content_type != 'application/pdf':
@@ -83,20 +86,15 @@ class FileUploadPdfToImageView(views.APIView):
             for item in range(count_page_pdf):
                 print(item,'--------')
                 file_path_image.append( convert_from_path(filename, output_folder=path, last_page=item+2, first_page = item+1))
-
                 file_name_image.append(os.path.splitext(os.path.basename(filename))[0]+str(item) + '.jpg')     
 
         save_dir = './image/'+ unique_filename
         os.mkdir(save_dir)
-        print(file_path_image,'-----------------')
         zip_dir = unique_filename+'.zip'
         with zipfile.ZipFile(zip_dir, 'w') as myzip:         
             for index,page in enumerate(file_path_image):
-                print(page,'page')
                 page[0].save(os.path.join(save_dir, file_name_image[index]), 'JPEG')
-            
                 myzip.write(os.path.join(save_dir, file_name_image[index]))
-                print(file_name_image[index],'*********',os.path.join(save_dir, file_name_image[index]))
 
 
         response = FileResponse(open(zip_dir, 'rb'),filename=data._name+'.zip')
@@ -104,3 +102,98 @@ class FileUploadPdfToImageView(views.APIView):
         shutil.rmtree(save_dir)
         os.remove(zip_dir)
         return response
+
+
+class FileUploadPdfToExcelView(views.APIView):
+    serializer_class = UploadSerializer
+    def post(self, request,format=None):
+        data = request.data['file']
+        if data.content_type != 'application/pdf':
+            return Response(status=400)
+        
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output)
+        worksheet = workbook.add_worksheet()
+        pdf = []
+
+        with open('data-1.pdf', 'rb') as pdf_file:
+            pdf = pdftotext.PDF(pdf_file)
+
+        count = 1
+        for item in pdf:
+            for i in item.split("\n"):
+                print(i)
+                worksheet.set_column(0, 0, 550)
+                print(len(i))
+                worksheet.write('A'+str(count),str(i))
+                count = count +1
+
+        # for page in range(pdf_reader.getNumPages()):
+        #     print(pdf_reader.getPage(page).extractText())
+        #     text = pdf_reader.getPage(page).extractText().split("\n")
+        #     for i in range(len(text)):
+        #         # Printing the line
+        #     # Lines are seprated using "\n"
+        #         print(text[i],"\n",'-----------')
+        #     # print(text)
+        #     break
+        #     # worksheet.write('A'+str(page),)
+       
+        workbook.close()
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment;filename="'+'test'+".xlsx"
+        response.write(output.getvalue())
+        return response
+
+class FileUploadImageToPDFView(views.APIView):
+    serializer_class = UploadSerializer
+    def post(self, request,format=None):
+        data = request.data['file']
+        print(data.__dict__)
+        if data.content_type == 'image/jpeg' or data.content_type == 'image/png':
+            unique_filename = str(uuid.uuid4())
+            file_path = 'image/'+unique_filename+'.'+data.content_type.split('/')[1]
+            path = default_storage.save(file_path, ContentFile(data.read()))
+            tmp_file = os.path.join(settings.MEDIA_ROOT, path)
+            pdf_path ='pdf/'+unique_filename+'.pdf'
+            if data.content_type == 'image/png':
+                custom_img_png_2pdf(file_path,pdf_path)
+            else:
+                custom_img2pdf(file_path,pdf_path)
+            response = FileResponse(open(pdf_path, 'rb'),filename=data._name+'.pdf')
+            os.remove(tmp_file)
+            os.remove(pdf_path)
+            return response
+        else:
+            return Response(status=400)
+        
+
+class FileUploadDocxToPDFView(views.APIView):
+    serializer_class = UploadSerializer
+    def post(self, request,format=None):
+        data = request.data['file']
+        print(data.__dict__)
+        if data.content_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            unique_filename = str(uuid.uuid4())
+            file_path = 'docx/'+unique_filename+'.docx'
+            path = default_storage.save(file_path, ContentFile(data.read()))
+            tmp_file = os.path.join(settings.MEDIA_ROOT, path)
+            pdf_path ='pdf/'+unique_filename+'.pdf'
+            print(tmp_file,'--------',pdf_path)
+            l = doc2pdf(tmp_file,pdf_path)
+            print('ancav',l)
+            response = FileResponse(open(pdf_path, 'rb'),filename=data._name+'.docx')
+            os.remove(tmp_file)
+            os.remove(pdf_path)
+            return response
+        else:
+            return Response(status=400)
+
+
+
+# custom_img2pdf('update0.3 Project Requirements documentation.jpg','test.pdf')
+
+# doc2pdf('update0.3 Project Requirements documentation.docx')
+
+# custom_img2pdf("image/b7fcf191-8319-4ba3-bcff-fa46452fec22.png",  "pdf/b7fcf191-8319-4ba3-bcff-fa46452fec22.pdf")
+# doc2pdf('docx/c826c8f9-b9b5-4dbf-8858-0430c6560b08.docx','pdf/c826c8f9-b9b5-4dbf-8858-0430c6560b08.pdf')
