@@ -20,6 +20,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from .admin import  myems_admin_site
 
 from django.conf import settings
 
@@ -36,7 +37,7 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', myems_admin_site.urls),
     path('auth/', include('authentication.urls')),
     path('convert/', include('convertapi.urls')),
 

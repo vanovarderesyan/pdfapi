@@ -116,11 +116,14 @@ CORS_ORIGIN_REGEX_WHITELIST = [
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'pdf',
+        'USER': 'pdf_user',
+        'PASSWORD': 'c@y[6WPvw#BtA7uN',
+        'HOST': '165.227.78.10',   # Or an IP Address that your DB is hosted on
+        'PORT': '3306'
     }
 }
-
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
