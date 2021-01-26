@@ -37,6 +37,9 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
+     path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
+    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
+
     path('admin/', myems_admin_site.urls),
     path('auth/', include('authentication.urls')),
     path('convert/', include('convertapi.urls')),
