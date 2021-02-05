@@ -172,7 +172,7 @@ class FileUploadDocxToPDFView(views.APIView):
     serializer_class = UploadSerializer
     def post(self, request,format=None):
         data = request.data['file']
-        print(data.__dict__)
+        print(data)
         if data.content_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
             unique_filename = str(uuid.uuid4())
             file_path = 'docx/'+unique_filename+'.docx'
@@ -197,17 +197,3 @@ class FileUploadDocxToPDFView(views.APIView):
 
 # custom_img2pdf("image/b7fcf191-8319-4ba3-bcff-fa46452fec22.png",  "pdf/b7fcf191-8319-4ba3-bcff-fa46452fec22.pdf")
 # doc2pdf('docx/c826c8f9-b9b5-4dbf-8858-0430c6560b08.docx','pdf/c826c8f9-b9b5-4dbf-8858-0430c6560b08.pdf')
-class C:
-    dangerous = 2
-c1 = C()
-c2 = C()
-print (c1.dangerous)
-c1.dangerous = 3
-print (c1.dangerous)
-print (c2.dangerous)
-del c1.dangerous
-print (c1.dangerous)
-C.dangerous = 3
-print (c2.dangerous)
-list = ['a', 'b', 'c', 'd', 'e']
-print (list[1:])
