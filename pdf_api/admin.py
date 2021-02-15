@@ -3,6 +3,7 @@ from  django.contrib.admin import  AdminSite
 from  django.utils.translation import  ungettext_lazy
 from authentication.models import User
 from subscription.models import Subscription,SubscriptionNotifications
+from utils.models import Contact
 
 
 
@@ -22,4 +23,6 @@ myems_admin_site = MyEmsAdminSite()
 myems_admin_site.register(User)
 myems_admin_site.register(Subscription)
 myems_admin_site.register(SubscriptionNotifications)
+myems_admin_site.register(Contact)
+
 
