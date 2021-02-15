@@ -9,7 +9,7 @@ from .views import (
 from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'subscription', SubscriptionViewSet)
-router.register(r'subscription-notifications', SubscriptionViewSet)
+router.register(r'subscription-notifications', SubscriptionNotificationsSerializer)
 
 
 
