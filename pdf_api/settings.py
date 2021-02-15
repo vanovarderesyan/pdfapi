@@ -52,7 +52,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     'authentication',
-    'convertapi'
+    'ckeditor',
+    'convertapi',
+    'subscription'
 ]
 
 SWAGGER_SETTINGS = {

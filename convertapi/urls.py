@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path,include
 from .views import (
     FileUploadView,
     FileUploadPdfToImageView,
@@ -18,8 +18,4 @@ urlpatterns = [
     path('image-to-pdf/', FileUploadImageToPDFView.as_view()),
     path('docx-to-pdf/', FileUploadDocxToPDFView.as_view()),
 
-
-
-
-    
 ]
