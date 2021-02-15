@@ -1,7 +1,7 @@
 from django.urls import path,include
 from .views import (
         SubscriptionViewSet,
-        SubscriptionNotificationsSerializer
+        SubscriptionNotificationsViewSet
     )
 
 
@@ -9,7 +9,7 @@ from .views import (
 from rest_framework import routers
 router = routers.DefaultRouter()
 router.register(r'subscription', SubscriptionViewSet)
-router.register(r'subscription-notifications', SubscriptionNotificationsSerializer)
+router.register(r'subscription-notifications', SubscriptionNotificationsViewSet)
 
 
 
