@@ -14,5 +14,7 @@ router.register(r'subscription-notifications', SubscriptionNotificationsViewSet)
 
 
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('utils', include('utils.urls'))
+
 ]

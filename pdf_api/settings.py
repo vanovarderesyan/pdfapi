@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'authentication',
     'ckeditor',
     'convertapi',
-    'subscription'
+    'subscription',
+    'utils'
 ]
 
 SWAGGER_SETTINGS = {
