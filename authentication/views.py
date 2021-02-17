@@ -136,6 +136,7 @@ class RequestPasswordResetEmail(generics.GenericAPIView):
 
         email = request.data.get('email', '')
 
+        print(email)
         if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
             uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
@@ -165,17 +166,17 @@ class PasswordTokenCheckAPI(generics.GenericAPIView):
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
             user = User.objects.get(id=id)
-
+            print(user,id)
             if not PasswordResetTokenGenerator().check_token(user, token):
                 if len(redirect_url) > 3:
                     return CustomRedirect(redirect_url+'?token_valid=False')
                 else:
-                    return CustomRedirect(os.environ.get('FRONTEND_URL', '')+'?token_valid=False')
+                    return CustomRedirect(os.environ.get('FRONTEND_URL', 'pdfmake.com')+'?token_valid=False')
 
             if redirect_url and len(redirect_url) > 3:
                 return CustomRedirect(redirect_url+'?token_valid=True&message=Credentials Valid&uidb64='+uidb64+'&token='+token)
             else:
-                return CustomRedirect(os.environ.get('FRONTEND_URL', '')+'?token_valid=False')
+                return CustomRedirect(os.environ.get('FRONTEND_URL', 'pdfmake.com')+'?token_valid=False')
 
         except DjangoUnicodeDecodeError as identifier:
             try:
