@@ -7,7 +7,7 @@ from django.contrib.auth.models import (
 from django.db import models
 from rest_framework_simplejwt.tokens import RefreshToken
 
-
+from  subscription.models import Subscription
 class UserManager(BaseUserManager):
 
     def create_user(self, username, email, password=None,full_name=None,phone=None):

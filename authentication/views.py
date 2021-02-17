@@ -41,6 +41,9 @@ from django.core.files.base import ContentFile
 import uuid
 from django.http import FileResponse
 
+from django.shortcuts import redirect
+
+
 class FileUploadView(views.APIView):
     serializer_class = UploadSerializer
 
@@ -109,7 +112,7 @@ class VerifyEmail(views.APIView):
             if not user.is_verified:
                 user.is_verified = True
                 user.save()
-            return Response({'email': 'Successfully activated'}, status=status.HTTP_200_OK)
+            return redirect('https://pdfmake.com/#/login')
         except jwt.ExpiredSignatureError as identifier:
             return Response({'error': 'Activation Expired'}, status=status.HTTP_400_BAD_REQUEST)
         except jwt.exceptions.DecodeError as identifier:
