@@ -101,10 +101,12 @@ class FileUploadPdfToImageView(views.APIView):
                     myzip.write(os.path.join(save_dir, file_name_image[index]))
 
 
-            response = FileResponse(open(zip_dir, 'rb'),filename=data._name+'.zip')
+            # response = FileResponse(open(zip_dir, 'rb'),filename=data._name+'.zip')
             os.remove(tmp_file)
-            shutil.rmtree(save_dir)
-            os.remove(zip_dir)
+            # shutil.rmtree(save_dir)
+            # os.remove(zip_dir)
+            return Response({'success': True, 'file': 'https://api.pdfmake.com/media/'+zip_dir}, status=200)
+
             return response
         except:
             return Response(status=400)
