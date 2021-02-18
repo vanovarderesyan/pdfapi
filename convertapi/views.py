@@ -36,6 +36,7 @@ import pdftotext
 from .doc2pdf import doc2pdf
 from .imgpdf import custom_img2pdf,custom_img_png_2pdf
 from django.conf import settings
+from rest_framework.parsers import MultiPartParser, FormParser
 
 class FileUploadView(views.APIView):
     serializer_class = UploadSerializer
@@ -63,6 +64,7 @@ class FileUploadView(views.APIView):
 
 class FileUploadPdfToImageView(views.APIView):
     serializer_class = UploadSerializer
+
     def post(self, request,format=None):
         data = request.data['file']
         try:
@@ -149,7 +151,9 @@ class FileUploadPdfToExcelView(views.APIView):
             return Response(status=400)
 
 class FileUploadImageToPDFView(views.APIView):
-    serializer_class = UploadSerializer
+    # serializer_class = UploadSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
     def post(self, request,format=None):
         data = request.data['file']
         try:
@@ -162,9 +166,11 @@ class FileUploadImageToPDFView(views.APIView):
                 custom_img_png_2pdf(file_path,pdf_path)
             else:
                 custom_img2pdf(file_path,pdf_path)
-            response = FileResponse(open(pdf_path, 'rb'),filename=data._name+'.pdf')
+            # response = FileResponse(open(pdf_path, 'rb'),filename=data._name+'.pdf')
             os.remove(tmp_file)
-            os.remove(pdf_path)
+            # os.remove(pdf_path)
+            return Response({'success': True, 'file': 'https://api.pdfmake.com/media/'+pdf_path}, status=200)
+
             return response
         except:
             return Response(status=400)
