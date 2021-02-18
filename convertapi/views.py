@@ -55,10 +55,11 @@ class FileUploadView(views.APIView):
             cv = Converter(tmp_file)
             cv.convert(docs_file_name_path, start=0, end=None)
             cv.close()
-            response = FileResponse(open(docs_file_name_path, 'rb'),filename=data._name+'.docx')
-            os.remove(docs_file_name_path)
+            # response = FileResponse(open(docs_file_name_path, 'rb'),filename=data._name+'.docx')
+            # os.remove(docs_file_name_path)
             os.remove(tmp_file)
-            return response
+            return Response({'success': True, 'file': 'https://api.pdfmake.com/media/'+docs_file_name_path}, status=200)
+
         except:
             return Response(status=400)
 
