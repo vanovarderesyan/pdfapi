@@ -5,11 +5,21 @@ from ckeditor.fields import RichTextField
 
 class Subscription(models.Model):
     price =models.DecimalField(max_digits=19, decimal_places=10)
-    body = RichTextField()
+    name = models.TextField(null=True,blank=True)
     is_free = models.BooleanField(null=True,blank=True,default=False)
     
-    def __str__(self):
-        return self.body
+    # def __str__(self):
+    #     return self.name
+
+
+
+class SubscriptionText(models.Model):
+    subscription = models.ForeignKey(Subscription,on_delete=models.CASCADE,related_name="related_name")
+    text = models.TextField()
+
+    # def __str__(self):
+    #     return self.text
+
 
 
 class SubscriptionNotifications(models.Model):
