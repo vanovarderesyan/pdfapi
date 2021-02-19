@@ -8,9 +8,9 @@ from translated_fields import TranslatedField
 
 # Create your models here.
 Subscription_CHOICES = [
-    ('0', 'FREE'),
-    ('1', 'CHEAP'),
-    ('2', 'EXPENSIVE')
+    (0, 'FREE'),
+    (1, 'CHEAP'),
+    (2, 'EXPENSIVE')
 ]
 class Subscription(models.Model):
     price =models.FloatField()
