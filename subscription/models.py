@@ -1,5 +1,10 @@
 from django.db import models
 from ckeditor.fields import RichTextField
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from translated_fields import TranslatedField
+
 
 # Create your models here.
 
@@ -28,7 +33,10 @@ class SubscriptionNotifications(models.Model):
         return self.email
 
 class FAQ(models.Model):
-    question = models.TextField()
-    answer = models.TextField()
-    def __str__(self):
-        return self.question
+    question = TranslatedField(
+        models.CharField(_("question"), max_length=200,null=True),
+    )
+    answer = TranslatedField(
+        models.CharField(_("answer"), max_length=200,null=True),
+    )
+

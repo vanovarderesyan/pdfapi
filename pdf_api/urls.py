@@ -21,6 +21,8 @@ from drf_yasg import openapi
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from .admin import  myems_admin_site
+from django.conf.urls.i18n import i18n_patterns 
+from django.utils.translation import gettext_lazy as _
 
 from django.conf import settings
 
@@ -37,11 +39,10 @@ schema_view = get_schema_view(
 
 
 urlpatterns = [
-     path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
-    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
+
+
     path('api/', include('subscription.urls')),
 
-    path('admin/', myems_admin_site.urls),
     path('auth/', include('authentication.urls')),
     path('convert/', include('convertapi.urls')),
 
@@ -55,6 +56,14 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc',
                                        cache_timeout=0), name='schema-redoc'),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+urlpatterns += i18n_patterns(
+            path('jet/', include('jet.urls', 'jet')),  # Django JET URLS
+    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
+    path('admin/', myems_admin_site.urls),
+    
+        prefix_default_language=False
+    )+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += staticfiles_urlpatterns()
 
