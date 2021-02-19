@@ -7,11 +7,15 @@ from translated_fields import TranslatedField
 
 
 # Create your models here.
-
+Subscription_CHOICES = [
+    ('0', 'FREE'),
+    ('1', 'CHEAP'),
+    ('2', 'EXPENSIVE')
+]
 class Subscription(models.Model):
-    price =models.DecimalField(max_digits=19, decimal_places=10)
+    price =models.FloatField()
     name = models.TextField(null=True,blank=True)
-    is_free = models.BooleanField(null=True,blank=True,default=False)
+    type = models.IntegerField(choices=Subscription_CHOICES,null=True,blank=True,default=False)
     
     # def __str__(self):
     #     return self.name
