@@ -2,7 +2,7 @@ from django.contrib import  admin
 from  django.contrib.admin import  AdminSite
 from  django.utils.translation import  ungettext_lazy
 from authentication.models import User
-from subscription.models import Subscription,SubscriptionNotifications,SubscriptionText
+from subscription.models import Subscription,SubscriptionNotifications,SubscriptionText,FAQ
 from utils.models import Contact
 
 
@@ -30,5 +30,7 @@ myems_admin_site.register(User)
 myems_admin_site.register(Subscription,SubscriptionAdmin)
 myems_admin_site.register(SubscriptionNotifications)
 myems_admin_site.register(Contact)
+myems_admin_site.register(FAQ)
+
 
 

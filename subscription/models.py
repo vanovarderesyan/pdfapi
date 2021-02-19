@@ -14,7 +14,7 @@ class Subscription(models.Model):
 
 
 class SubscriptionText(models.Model):
-    subscription = models.ForeignKey(Subscription,on_delete=models.CASCADE,related_name="related_name")
+    subscription = models.ForeignKey(Subscription,on_delete=models.CASCADE,related_name="subscription_text")
     text = models.TextField()
 
     # def __str__(self):
@@ -24,6 +24,11 @@ class SubscriptionText(models.Model):
 
 class SubscriptionNotifications(models.Model):
     email = models.EmailField()
-    
     def __str__(self):
         return self.email
+
+class FAQ(models.Model):
+    question = models.TextField()
+    answer = models.TextField()
+    def __str__(self):
+        return self.question

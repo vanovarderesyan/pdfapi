@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Subscription,SubscriptionNotifications,SubscriptionText
+from .models import Subscription,SubscriptionNotifications,SubscriptionText,FAQ
 class SubscriptionTextSerializerLoc(serializers.ModelSerializer):
     class Meta:
         model = SubscriptionText
@@ -7,7 +7,7 @@ class SubscriptionTextSerializerLoc(serializers.ModelSerializer):
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
-    related_name = SubscriptionTextSerializerLoc(many=True,read_only=True)
+    subscription_text = SubscriptionTextSerializerLoc(many=True,read_only=True)
         
     class Meta:
         depth=1
@@ -18,4 +18,9 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 class SubscriptionNotificationsSerializer(serializers.ModelSerializer):
     class Meta:
         model = SubscriptionNotifications
+        fields = '__all__'
+
+class FAQSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FAQ
         fields = '__all__'
