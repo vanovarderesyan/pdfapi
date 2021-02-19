@@ -4,7 +4,8 @@ from .views import (
     FileUploadPdfToImageView,
     FileUploadPdfToExcelView
     ,FileUploadImageToPDFView,
-    FileUploadDocxToPDFView
+    FileUploadDocxToPDFView,
+    FileUploadXLSToPDFView
     )
 
 
@@ -17,5 +18,7 @@ urlpatterns = [
     path('pdf-to-excel/', FileUploadPdfToExcelView.as_view()),
     path('image-to-pdf/', FileUploadImageToPDFView.as_view()),
     path('docx-to-pdf/', FileUploadDocxToPDFView.as_view()),
+    path('xls-to-pdf/', FileUploadXLSToPDFView.as_view()),
+
 
 ]

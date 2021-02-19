@@ -38,6 +38,17 @@ from .imgpdf import custom_img2pdf,custom_img_png_2pdf
 from django.conf import settings
 from rest_framework.parsers import MultiPartParser, FormParser
 
+import tabula
+
+import convertapi
+
+# convertapi.api_secret = 'pN78fYZvmzJ6POA9'
+# convertapi.urls = 'https://v2.convertapi.com/convert/xls/to/pdf?StoreFile=true'
+# convertapi.convert('pdf', {
+#     'File': '/home/aro/Downloads/test.xlsx'
+# }, from_format = 'xls').save_files('./pdf')
+
+
 class FileUploadView(views.APIView):
     serializer_class = UploadSerializer
 
@@ -115,43 +126,45 @@ class FileUploadPdfToExcelView(views.APIView):
     serializer_class = UploadSerializer
     def post(self, request,format=None):
         data = request.data['file']
-        try:
-        
-            output = BytesIO()
-            workbook = xlsxwriter.Workbook(output)
-            worksheet = workbook.add_worksheet()
-            pdf = []
+        # try:
+    
+        output = BytesIO()
+        workbook = xlsxwriter.Workbook(output)
+        worksheet = workbook.add_worksheet()
+        pdf = []
+        unique_filename = str(uuid.uuid4())
+        file_path = 'pdf/'+unique_filename+'.pdf'
+        path = default_storage.save(file_path, ContentFile(data.read()))
+        with open(file_path, 'rb') as pdf_file:
+            pdf = pdftotext.PDF(pdf_file)
 
-            with open('data-1.pdf', 'rb') as pdf_file:
-                pdf = pdftotext.PDF(pdf_file)
+        count = 1
+        for item in pdf:
+            for i in item.split("\n"):
+                print(i)
+                worksheet.set_column(0, 0, 550)
+                print(len(i))
+                worksheet.write('A'+str(count),str(i))
+                count = count +1
 
-            count = 1
-            for item in pdf:
-                for i in item.split("\n"):
-                    print(i)
-                    worksheet.set_column(0, 0, 550)
-                    print(len(i))
-                    worksheet.write('A'+str(count),str(i))
-                    count = count +1
-
-            # for page in range(pdf_reader.getNumPages()):
-            #     print(pdf_reader.getPage(page).extractText())
-            #     text = pdf_reader.getPage(page).extractText().split("\n")
-            #     for i in range(len(text)):
-            #         # Printing the line
-            #     # Lines are seprated using "\n"
-            #         print(text[i],"\n",'-----------')
-            #     # print(text)
-            #     break
-            #     # worksheet.write('A'+str(page),)
-        
-            workbook.close()
-            response = HttpResponse(content_type='application/vnd.ms-excel')
-            response['Content-Disposition'] = 'attachment;filename="'+'test'+".xlsx"
-            response.write(output.getvalue())
-            return response
-        except:
-            return Response(status=400)
+        # for page in range(pdf_reader.getNumPages()):
+        #     print(pdf_reader.getPage(page).extractText())
+        #     text = pdf_reader.getPage(page).extractText().split("\n")
+        #     for i in range(len(text)):
+        #         # Printing the line
+        #     # Lines are seprated using "\n"
+        #         print(text[i],"\n",'-----------')
+        #     # print(text)
+        #     break
+        #     worksheet.write('A'+str(page),)
+    
+        workbook.close()
+        response = HttpResponse(content_type='application/vnd.ms-excel')
+        response['Content-Disposition'] = 'attachment;filename="'+'test'+".xlsx"
+        response.write(output.getvalue())
+        return response
+        # except:
+        #     return Response(status=400)
 
 class FileUploadImageToPDFView(views.APIView):
     # serializer_class = UploadSerializer
@@ -204,6 +217,28 @@ class FileUploadDocxToPDFView(views.APIView):
 
   
 
+
+class FileUploadXLSToPDFView(views.APIView):
+    serializer_class = UploadSerializer
+    def post(self, request,format=None):
+        data = request.data['file']
+        try:
+            unique_filename = str(uuid.uuid4())
+            print(data)
+            file_path = 'xlsx/'+unique_filename+'.xls'
+            path = default_storage.save(file_path, ContentFile(data.read()))
+            tmp_file = os.path.join(settings.MEDIA_ROOT, path)
+
+            print(path)
+            pdf_path = unique_filename+'.pdf'
+            os.system('soffice --headless --convert-to pdf '+path)
+            print('soffice --headless --convert-to pdf --outdir pdf '+path)
+            os.remove(tmp_file)
+
+            # os.remove(pdf_path)
+            return Response({'success': True, 'file': 'https://api.pdfmake.com/media/'+pdf_path}, status=200)
+        except:
+            return Response(status=400)
 
 
 # custom_img2pdf('update0.3 Project Requirements documentation.jpg','test.pdf')
